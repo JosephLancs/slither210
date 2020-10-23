@@ -80,12 +80,14 @@ final class MySlitherWebSocketClient extends WebSocketClient {
     public void onOpen(ServerHandshake sh) {
         view.log("connected: " + sh.getHttpStatusMessage());
         view.onOpen();
+        view.setInfoLabel(0);
     }
 
     @Override
     public void onClose(int i, String string, boolean bln) {
         view.log("closed: " + i + ", " + bln + ", " + string);
         view.onClose();
+        view.setInfoLabel(2);
     }
 
     @Override
@@ -440,6 +442,7 @@ final class MySlitherWebSocketClient extends WebSocketClient {
     }
 
     private void processDead(int[] data) {
+        view.setInfoLabel(1);
         if (data.length != 4) {
             view.log("dead wrong length!");
             return;

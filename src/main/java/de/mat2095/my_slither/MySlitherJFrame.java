@@ -91,9 +91,9 @@ class MySlitherJFrame extends JFrame {
 
     private final JTextField server, name;
     private final JComboBox<String> snake;
-    private final JCheckBox useRandomServer;
+    private final JCheckBox useRandomServer, autoRC;
     private final JToggleButton connect;
-    private final JLabel rank, kills;
+    private final JLabel rank, kills, infoLabel;
     private final JSplitPane rightSplitPane, fullSplitPane;
     private final JTextArea log;
     private final JScrollBar logScrollBar;
@@ -148,6 +148,8 @@ class MySlitherJFrame extends JFrame {
         snake = new JComboBox<>(SNAKES);
         snake.setMaximumRowCount(snake.getItemCount());
 
+        autoRC = new JCheckBox("Auto-Reconnect", false);
+
         cb = new JButton("pick a colour");
 
         cb.addActionListener(new colorPickerQ());
@@ -194,6 +196,9 @@ class MySlitherJFrame extends JFrame {
 
         kills = new JLabel();
 
+        infoLabel = new JLabel("INFO:");
+        infoLabel.setFont(infoLabel.getFont().deriveFont(20f));
+
         settings.add(new JLabel("server:"),
             new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
         settings.add(server,
@@ -224,6 +229,10 @@ class MySlitherJFrame extends JFrame {
             new GridBagConstraints(4, 2, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
         settings.add(rank,
             new GridBagConstraints(5, 2, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
+        settings.add(autoRC,
+                new GridBagConstraints(4, 0, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
+        settings.add(infoLabel,
+                new GridBagConstraints(6, 0, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
 
         JComponent upperRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
         upperRow.add(settings);
@@ -485,6 +494,24 @@ class MySlitherJFrame extends JFrame {
             this.buttonSelected = buttonSelected;
             this.buttonEnabled = buttonEnabled;
             this.allowModifyData = allowModifyData;
+        }
+    }
+
+    void setInfoLabel(int i){
+        switch(i){
+            case 0:
+                infoLabel.setText("INFO: Joined a game!");
+                break;
+            case 1:
+                infoLabel.setText("INFO: You died. Press connect to join a new game!");
+                break;
+            case 2:
+                infoLabel.setText("INFO: Left game.");
+                if(autoRC.isSelected()){
+                    infoLabel.setText("INFO: Reconnecting...");
+                    connect.doClick();
+                }
+                break;
         }
     }
 }
