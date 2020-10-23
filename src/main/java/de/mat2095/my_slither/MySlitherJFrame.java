@@ -364,6 +364,9 @@ class MySlitherJFrame extends JFrame {
         }).start();
     }
 
+    public long getPing() throws NullPointerException {
+        return client.getPingtime();
+    }
 
     private class colorPickerQ implements ActionListener{
         public void actionPerformed(ActionEvent e) {
